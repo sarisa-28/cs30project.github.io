@@ -854,6 +854,7 @@ document.getElementById("save-edit-btn").addEventListener("click", async () => {
         if (response.ok) {
             alert("Question updated successfully!");
             document.getElementById("popup-editquestion").style.display = "none";
+            document.getElementById("blur-background").style.display = "none";
             fetchQuestions();
         } else {
             alert("Failed to update question.");
