@@ -1108,6 +1108,38 @@ app.post('/upload-questions', upload.single('file'), async (req, res) => {
         res.status(500).json({ error: 'Error uploading questions' });
     }
 });
+app.get('/quiz/:id', async (req, res) => {
+    try {
+        const quiz = await Quiz.findById(req.params.id);
+        if (!quiz) {
+            return res.status(404).send("Question not found");
+        }
+        res.json(quiz);
+    } catch (error) {
+        console.error("Error fetching question:", error);
+        res.status(500).send("Error fetching question");
+    }
+});
+
+app.put('/update-quiz/:id', async (req, res) => {
+    try {
+        const { type, question, options, correct, timer, level } = req.body;
+        const updatedQuiz = await Quiz.findByIdAndUpdate(
+            req.params.id,
+            { type, question, options, correct, timer, level },
+            { new: true }
+        );
+
+        if (!updatedQuiz) {
+            return res.status(404).send("Question not found");
+        }
+
+        res.json({ message: "Question updated successfully", updatedQuiz });
+    } catch (error) {
+        console.error("Error updating question:", error);
+        res.status(500).send("Error updating question");
+    }
+});
 
 //เว็บแบบที่2 
 // เส้นทางสำหรับเพิ่มคำถามใหม่
@@ -1730,6 +1762,38 @@ app.post('/upload-questions2', upload.single('file'), async (req, res) => {
     } catch (error) {
         console.error('Error uploading questions:', error);
         res.status(500).json({ error: 'Error uploading questions' });
+    }
+});
+app.get('/quiz2/:id', async (req, res) => {
+    try {
+        const quiz2 = await Quiz2.findById(req.params.id);
+        if (!quiz2) {
+            return res.status(404).send("Question not found");
+        }
+        res.json(quiz2);
+    } catch (error) {
+        console.error("Error fetching question:", error);
+        res.status(500).send("Error fetching question");
+    }
+});
+
+app.put('/update-quiz2/:id', async (req, res) => {
+    try {
+        const { type, question, options, correct, timer, level } = req.body;
+        const updatedQuiz2 = await Quiz2.findByIdAndUpdate(
+            req.params.id,
+            { type, question, options, correct, timer, level },
+            { new: true }
+        );
+
+        if (!updatedQuiz2) {
+            return res.status(404).send("Question not found");
+        }
+
+        res.json({ message: "Question updated successfully", updatedQuiz2 });
+    } catch (error) {
+        console.error("Error updating question:", error);
+        res.status(500).send("Error updating question");
     }
 });
 
