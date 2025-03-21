@@ -222,6 +222,9 @@ h2{
             <!-- Player data will be inserted here -->
         </tbody>
     </table>
+    <audio id="o-sound" src="sounds/o.mp3" preload="auto"></audio>
+    <audio id="hoverSound" src="sounds/h.mp3" preload="auto"></audio>
+    <iframe src="music.html" style="display: none;"></iframe>
 
     <script>
         const socket = io();
@@ -254,6 +257,36 @@ h2{
 
         socket.on('update-player-status', fetchPlayers);
         fetchPlayers();
+
+// เสียงปุ่ม
+    // ฟังก์ชันเล่นเสียงแบบไม่มีดีเลย์
+    function playSound(sound) {
+        sound.pause();        // หยุดเสียงก่อนหน้า (ถ้ามี)
+        sound.currentTime = 0; // รีเซ็ตไปจุดเริ่มต้น
+        sound.play();         // เล่นเสียงใหม่ทันที
+    }
+
+    document.querySelectorAll("#top-menu a").forEach(item => {
+    item.addEventListener("mouseenter", () => {
+        const hoverSound = document.getElementById("hoverSound");
+        if (hoverSound) {
+            hoverSound.pause();  // หยุดเสียงก่อนหน้า
+            hoverSound.currentTime = 0; // รีเซ็ตเสียงไปจุดเริ่มต้น
+            hoverSound.play().catch(err => console.warn("⚠️ ไม่สามารถเล่นเสียง hover:", err));
+        }
+    });
+});
+//ตั้งค่าเสียง
+document.addEventListener("DOMContentLoaded", function() {
+        const soundSetting = localStorage.getItem('soundSetting');
+
+        if (soundSetting === 'off') {
+            document.querySelectorAll('audio').forEach(audio => {
+                audio.muted = true;
+            });
+        }
+    });
+
         // สร้างดาวตกใหม่
 function createMeteor() {
     const meteor = document.createElement('div');
